@@ -9,3 +9,11 @@ func filter[T any](ary []T, pred func(T) bool) []T {
 	}
 	return n
 }
+
+func mapBy[T, U any](ary []T, conv func(T) U) []U {
+	n := make([]U, len(ary), cap(ary))
+	for i, a := range ary {
+		n[i] = conv(a)
+	}
+	return n
+}
