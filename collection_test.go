@@ -54,6 +54,58 @@ func TestFilter(t *testing.T) {
 	}
 }
 
+func TestForEach(t *testing.T) {
+	{
+		input := []int{0, 1, 2, 3, 4, 5}
+		output := make([]int, 0, cap(input))
+
+		forEach(input, func(v int) {
+			output = append(output, v)
+		})
+		if diff := cmp.Diff(input, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input := []string{"a", "b", "c", "d", "e"}
+		output := make([]string, 0, cap(input))
+
+		forEach(input, func(v string) {
+			output = append(output, v)
+		})
+		if diff := cmp.Diff(input, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+}
+
+func TestForEachRight(t *testing.T) {
+	{
+		input := []int{0, 1, 2, 3, 4, 5}
+		expect := []int{5, 4, 3, 2, 1, 0}
+		output := make([]int, 0, cap(input))
+
+		forEachRight(input, func(v int) {
+			output = append(output, v)
+		})
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input := []string{"a", "b", "c", "d", "e"}
+		expect := []string{"e", "d", "c", "b", "a"}
+		output := make([]string, 0, cap(input))
+
+		forEachRight(input, func(v string) {
+			output = append(output, v)
+		})
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+}
+
 func TestMapBy(t *testing.T) {
 	{
 		input := []int{0, 1, 2, 3, 4, 5}
