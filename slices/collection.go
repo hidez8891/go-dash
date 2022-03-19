@@ -1,4 +1,4 @@
-package go_dash
+package slices
 
 func countBy[T any, U comparable](ary []T, f func(T) U) map[U]int {
 	group := map[U]int{}
