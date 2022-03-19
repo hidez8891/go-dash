@@ -186,6 +186,65 @@ func TestForEachRight(t *testing.T) {
 	}
 }
 
+func TestGroupBy(t *testing.T) {
+	{
+		input := []int{0, 1, 2, 3, 4}
+		expect := map[string][]int{
+			"even": {0, 2, 4},
+			"odd":  {1, 3},
+		}
+		f := func(v int) string {
+			if v%2 == 0 {
+				return "even"
+			} else {
+				return "odd"
+			}
+		}
+
+		output := groupBy(input, f)
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input := []int{0, 2, 4}
+		expect := map[string][]int{
+			"even": {0, 2, 4},
+		}
+		f := func(v int) string {
+			if v%2 == 0 {
+				return "even"
+			} else {
+				return "odd"
+			}
+		}
+
+		output := groupBy(input, f)
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+}
+
+func TestIncludes(t *testing.T) {
+	{
+		input := []int{0, 1, 2, 3, 4}
+
+		output := includes(input, 3)
+		if diff := cmp.Diff(true, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input := []int{0, 1, 2, 3, 4}
+
+		output := includes(input, -1)
+		if diff := cmp.Diff(false, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+}
+
 func TestMapBy(t *testing.T) {
 	{
 		input := []int{0, 1, 2, 3, 4, 5}
@@ -209,6 +268,87 @@ func TestMapBy(t *testing.T) {
 	}
 }
 
+func TestPartition(t *testing.T) {
+	{
+		input := []int{0, 1, 2, 3, 4}
+		expect := [][]int{{0, 2, 4}, {1, 3}}
+		f := func(v int) string {
+			if v%2 == 0 {
+				return "even"
+			} else {
+				return "odd"
+			}
+		}
+
+		output := partition(input, f)
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input := []int{0, 2, 4}
+		expect := [][]int{{0, 2, 4}}
+		f := func(v int) string {
+			if v%2 == 0 {
+				return "even"
+			} else {
+				return "odd"
+			}
+		}
+
+		output := partition(input, f)
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+}
+
+func TestReduce(t *testing.T) {
+	{
+		input := []string{"0", "1", "2", "3", "4"}
+		expect := "01234"
+		f := func(v, acc string) string { return acc + v }
+
+		output := reduce(input, f, "")
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input := []int{0, 1, 2, 3, 4}
+		expect := "01234"
+		f := func(v int, acc string) string { return acc + fmt.Sprintf("%d", v) }
+
+		output := reduce(input, f, "")
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+}
+
+func TestReduceRight(t *testing.T) {
+	{
+		input := []string{"0", "1", "2", "3", "4"}
+		expect := "43210"
+		f := func(v, acc string) string { return acc + v }
+
+		output := reduceRight(input, f, "")
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input := []int{0, 1, 2, 3, 4}
+		expect := "43210"
+		f := func(v int, acc string) string { return acc + fmt.Sprintf("%d", v) }
+
+		output := reduceRight(input, f, "")
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+}
+
 func TestSome(t *testing.T) {
 	{
 		input := []int{0, 1, 2, 3, 4, 5}
@@ -226,6 +366,29 @@ func TestSome(t *testing.T) {
 		expect := false
 
 		output := some(input, pred)
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+}
+
+func TestReject(t *testing.T) {
+	{
+		input := []int{0, 1, 2, 3, 4, 5}
+		pred := func(v int) bool { return v%2 == 0 }
+		expect := []int{1, 3, 5}
+
+		output := reject(input, pred)
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input := []int{1, 3, 5}
+		pred := func(v int) bool { return v%2 == 0 }
+		expect := []int{1, 3, 5}
+
+		output := reject(input, pred)
 		if diff := cmp.Diff(expect, output); diff != "" {
 			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
 		}
