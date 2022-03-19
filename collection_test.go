@@ -2,6 +2,7 @@ package go_dash
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 	"testing"
 
@@ -269,6 +270,16 @@ func TestMapBy(t *testing.T) {
 }
 
 func TestPartition(t *testing.T) {
+	trans := cmp.Transformer("sort", func(in [][]int) [][]int {
+		sort.Slice(in, func(i, j int) bool {
+			if in[i][0] == in[j][0] {
+				return len(in[i]) < len(in[j])
+			}
+			return in[i][0] < in[j][0]
+		})
+		return in
+	})
+
 	{
 		input := []int{0, 1, 2, 3, 4}
 		expect := [][]int{{0, 2, 4}, {1, 3}}
@@ -281,7 +292,7 @@ func TestPartition(t *testing.T) {
 		}
 
 		output := partition(input, f)
-		if diff := cmp.Diff(expect, output); diff != "" {
+		if diff := cmp.Diff(expect, output, trans); diff != "" {
 			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
 		}
 	}
@@ -297,7 +308,7 @@ func TestPartition(t *testing.T) {
 		}
 
 		output := partition(input, f)
-		if diff := cmp.Diff(expect, output); diff != "" {
+		if diff := cmp.Diff(expect, output, trans); diff != "" {
 			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
 		}
 	}
