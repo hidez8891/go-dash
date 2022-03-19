@@ -8,6 +8,46 @@ import (
 	"github.com/google/go-cmp/cmp"
 )
 
+func TestCountBy(t *testing.T) {
+	{
+		input := []int{0, 1, 2, 3, 4}
+		expect := map[string]int{
+			"even": 3,
+			"odd":  2,
+		}
+		f := func(v int) string {
+			if v%2 == 0 {
+				return "even"
+			} else {
+				return "odd"
+			}
+		}
+
+		output := countBy(input, f)
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input := []int{0, 2, 4}
+		expect := map[string]int{
+			"even": 3,
+		}
+		f := func(v int) string {
+			if v%2 == 0 {
+				return "even"
+			} else {
+				return "odd"
+			}
+		}
+
+		output := countBy(input, f)
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+}
+
 func TestEvery(t *testing.T) {
 	{
 		input := []int{0, 2, 4}
@@ -49,6 +89,46 @@ func TestFilter(t *testing.T) {
 			return strings.HasPrefix(v, "a")
 		})
 		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+}
+
+func TestFind(t *testing.T) {
+	{
+		input := []int{0, 1, 2, 3, 4, 5}
+		output, exist := find(input, func(v int) bool { return v%2 != 0 })
+		if diff := cmp.Diff(true, exist); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+		if diff := cmp.Diff(1, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input := []int{0, 1, 2, 3, 4, 5}
+		_, exist := find(input, func(v int) bool { return v%2 == 3 })
+		if diff := cmp.Diff(false, exist); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+}
+
+func TestFindLast(t *testing.T) {
+	{
+		input := []int{0, 1, 2, 3, 4, 5}
+		output, exist := findLast(input, func(v int) bool { return v%2 == 0 })
+		if diff := cmp.Diff(true, exist); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+		if diff := cmp.Diff(4, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input := []int{0, 1, 2, 3, 4, 5}
+		_, exist := findLast(input, func(v int) bool { return v%2 == 3 })
+		if diff := cmp.Diff(false, exist); diff != "" {
 			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
 		}
 	}
