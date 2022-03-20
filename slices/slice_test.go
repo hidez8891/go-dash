@@ -311,3 +311,216 @@ func TestDropWhile(t *testing.T) {
 		}
 	}
 }
+
+func TestFill(t *testing.T) {
+	{
+		input := []int{0, 1, 2, 3, 4}
+		expect := []int{0, 0, 0, 0, 0}
+
+		output := fill(input, 0)
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input := []int{}
+		expect := []int{}
+
+		output := fill(input, 0)
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+}
+
+func TestFindIndex(t *testing.T) {
+	{
+		input := []int{0, 1, 2, 3, 4, 5}
+		pred := func(v int) bool { return v%2 != 0 }
+
+		output := findIndex(input, pred)
+		if diff := cmp.Diff(1, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input := []int{0, 1, 2, 3, 4, 5}
+		pred := func(v int) bool { return v%2 == 3 }
+
+		output := findIndex(input, pred)
+		if diff := cmp.Diff(-1, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+}
+
+func TestFindLastIndex(t *testing.T) {
+	{
+		input := []int{0, 1, 2, 3, 4, 5}
+		pred := func(v int) bool { return v%2 == 0 }
+
+		output := findLastIndex(input, pred)
+		if diff := cmp.Diff(4, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input := []int{0, 1, 2, 3, 4, 5}
+		pred := func(v int) bool { return v%2 == 3 }
+
+		output := findLastIndex(input, pred)
+		if diff := cmp.Diff(-1, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+}
+
+func TestFlatten(t *testing.T) {
+	{
+		input := [][]int{{0, 1, 2}, {3, 4}, {5}}
+		expect := []int{0, 1, 2, 3, 4, 5}
+
+		output := flatten(input)
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input := [][][]int{{{0, 1, 2}}, {{3, 4}, {5}}}
+		expect := [][]int{{0, 1, 2}, {3, 4}, {5}}
+
+		output := flatten(input)
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input := [][]int{{}, {3, 4}, {5}}
+		expect := []int{3, 4, 5}
+
+		output := flatten(input)
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input := [][]int{{}, {}, {}}
+		expect := []int{}
+
+		output := flatten(input)
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+}
+
+func TestIntersection(t *testing.T) {
+	{
+		input1 := []int{0, 1}
+		input2 := []int{2, 1, 4}
+		expect := []int{1}
+
+		output := intersection(input1, input2)
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input1 := []int{0, 1}
+		input2 := []int{2, 4}
+		expect := []int{}
+
+		output := intersection(input1, input2)
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+}
+
+func TestIntersectionBy(t *testing.T) {
+	floor := func(v float64) int { return int(math.Floor(v)) }
+
+	{
+		input1 := []float64{0.5, 1.4}
+		input2 := []float64{2.3, 1.5, 4.5}
+		expect := []float64{1.4}
+
+		output := intersectionBy(input1, input2, floor)
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input1 := []float64{0.5, 1.4}
+		input2 := []float64{2.3, 4.5}
+		expect := []float64{}
+
+		output := intersectionBy(input1, input2, floor)
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+}
+
+func TestIntersectionWith(t *testing.T) {
+	equals := func(v1, v2 float64) bool { return int(math.Floor(v1)) == int(math.Floor(v2)) }
+
+	{
+		input1 := []float64{0.5, 1.4}
+		input2 := []float64{2.3, 1.5, 4.5}
+		expect := []float64{1.4}
+
+		output := intersectionWith(input1, input2, equals)
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input1 := []float64{0.5, 1.4}
+		input2 := []float64{2.3, 4.5}
+		expect := []float64{}
+
+		output := intersectionWith(input1, input2, equals)
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+}
+
+func TestLastIndexOf(t *testing.T) {
+	{
+		input := []string{"a", "b", "c", "a", "b", "c"}
+
+		output := lastIndexOf(input, "a")
+		if diff := cmp.Diff(3, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input := []string{"a", "b", "c", "a", "b", "c"}
+
+		output := lastIndexOf(input, "GGG")
+		if diff := cmp.Diff(-1, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+}
+
+func TestIndexOf(t *testing.T) {
+	{
+		input := []string{"a", "b", "c", "a", "b", "c"}
+
+		output := indexOf(input, "c")
+		if diff := cmp.Diff(2, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input := []string{"a", "b", "c", "a", "b", "c"}
+
+		output := indexOf(input, "GGG")
+		if diff := cmp.Diff(-1, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+}

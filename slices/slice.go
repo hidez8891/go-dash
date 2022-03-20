@@ -126,3 +126,98 @@ func dropWhile[T any](ary []T, pred func(T) bool) []T {
 	copy(out, ary[index:])
 	return out
 }
+
+func fill[T any](ary []T, v T) []T {
+	for i, _ := range ary {
+		ary[i] = v
+	}
+	return ary
+}
+
+func findIndex[T any](ary []T, pred func(T) bool) int {
+	for i, a := range ary {
+		if pred(a) {
+			return i
+		}
+	}
+	return -1
+}
+
+func findLastIndex[T any](ary []T, pred func(T) bool) int {
+	for i := len(ary); i > 0; i-- {
+		if pred(ary[i-1]) {
+			return i - 1
+		}
+	}
+	return -1
+}
+
+func flatten[T any](ary [][]T) []T {
+	size := 0
+	for _, v := range ary {
+		size += len(v)
+	}
+
+	out := make([]T, size)
+	index := 0
+	for _, v := range ary {
+		copy(out[index:], v)
+		index += len(v)
+	}
+
+	return out
+}
+
+func intersection[T comparable](a1 []T, a2 []T) []T {
+	n := make([]T, 0)
+	for _, v := range a1 {
+		if includes(a2, v) {
+			n = append(n, v)
+		}
+	}
+	return n
+}
+
+func intersectionBy[T, U comparable](a1 []T, a2 []T, f func(T) U) []T {
+	b2 := make([]U, len(a2))
+	for i, v := range a2 {
+		b2[i] = f(v)
+	}
+
+	n := make([]T, 0)
+	for _, v := range a1 {
+		if includes(b2, f(v)) {
+			n = append(n, v)
+		}
+	}
+	return n
+}
+
+func intersectionWith[T comparable](a1 []T, a2 []T, pred func(T, T) bool) []T {
+	n := make([]T, 0)
+	for _, v1 := range a1 {
+		f := func(v2 T) bool { return pred(v1, v2) }
+		if some(a2, f) {
+			n = append(n, v1)
+		}
+	}
+	return n
+}
+
+func lastIndexOf[T comparable](ary []T, v T) int {
+	for i := len(ary); i > 0; i-- {
+		if ary[i-1] == v {
+			return i - 1
+		}
+	}
+	return -1
+}
+
+func indexOf[T comparable](ary []T, v T) int {
+	for i, a := range ary {
+		if a == v {
+			return i
+		}
+	}
+	return -1
+}
