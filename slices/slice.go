@@ -127,11 +127,10 @@ func dropWhile[T any](ary []T, pred func(T) bool) []T {
 	return out
 }
 
-func fill[T any](ary []T, v T) []T {
+func fill[T any](ary []T, v T) {
 	for i, _ := range ary {
 		ary[i] = v
 	}
-	return ary
 }
 
 func findIndex[T any](ary []T, pred func(T) bool) int {
@@ -220,24 +219,4 @@ func indexOf[T comparable](ary []T, v T) int {
 		}
 	}
 	return -1
-}
-
-func pull[T comparable](ary []T, values ...T) []T {
-	out := make([]T, 0)
-	for _, v := range ary {
-		if !includes(values, v) {
-			out = append(out, v)
-		}
-	}
-	return out
-}
-
-func pullAll[T comparable](ary []T, values []T) []T {
-	out := make([]T, 0)
-	for _, v := range ary {
-		if !includes(values, v) {
-			out = append(out, v)
-		}
-	}
-	return out
 }

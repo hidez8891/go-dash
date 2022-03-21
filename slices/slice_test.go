@@ -317,8 +317,8 @@ func TestFill(t *testing.T) {
 		input := []int{0, 1, 2, 3, 4}
 		expect := []int{0, 0, 0, 0, 0}
 
-		output := fill(input, 0)
-		if diff := cmp.Diff(expect, output); diff != "" {
+		fill(input, 0)
+		if diff := cmp.Diff(expect, input); diff != "" {
 			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
 		}
 	}
@@ -326,8 +326,8 @@ func TestFill(t *testing.T) {
 		input := []int{}
 		expect := []int{}
 
-		output := fill(input, 0)
-		if diff := cmp.Diff(expect, output); diff != "" {
+		fill(input, 0)
+		if diff := cmp.Diff(expect, input); diff != "" {
 			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
 		}
 	}
@@ -520,66 +520,6 @@ func TestIndexOf(t *testing.T) {
 
 		output := indexOf(input, "GGG")
 		if diff := cmp.Diff(-1, output); diff != "" {
-			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
-		}
-	}
-}
-
-func TestPull(t *testing.T) {
-	{
-		input := []string{"a", "b", "c", "a", "b", "c"}
-		expect := []string{"a", "c", "a", "c"}
-
-		output := pull(input, "b")
-		if diff := cmp.Diff(expect, output); diff != "" {
-			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
-		}
-	}
-	{
-		input := []string{"a", "b", "c", "a", "b", "c"}
-		expect := []string{"a", "a"}
-
-		output := pull(input, "c", "b")
-		if diff := cmp.Diff(expect, output); diff != "" {
-			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
-		}
-	}
-	{
-		input := []string{"a", "b", "c", "a", "b", "c"}
-		expect := []string{"a", "b", "c", "a", "b", "c"}
-
-		output := pull(input)
-		if diff := cmp.Diff(expect, output); diff != "" {
-			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
-		}
-	}
-}
-
-func TestPullAll(t *testing.T) {
-	{
-		input := []string{"a", "b", "c", "a", "b", "c"}
-		expect := []string{"a", "c", "a", "c"}
-
-		output := pullAll(input, []string{"b"})
-		if diff := cmp.Diff(expect, output); diff != "" {
-			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
-		}
-	}
-	{
-		input := []string{"a", "b", "c", "a", "b", "c"}
-		expect := []string{"a", "a"}
-
-		output := pullAll(input, []string{"c", "b"})
-		if diff := cmp.Diff(expect, output); diff != "" {
-			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
-		}
-	}
-	{
-		input := []string{"a", "b", "c", "a", "b", "c"}
-		expect := []string{"a", "b", "c", "a", "b", "c"}
-
-		output := pullAll(input, []string{})
-		if diff := cmp.Diff(expect, output); diff != "" {
 			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
 		}
 	}
