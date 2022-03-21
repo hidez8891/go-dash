@@ -221,3 +221,23 @@ func indexOf[T comparable](ary []T, v T) int {
 	}
 	return -1
 }
+
+func pull[T comparable](ary []T, values ...T) []T {
+	out := make([]T, 0)
+	for _, v := range ary {
+		if !includes(values, v) {
+			out = append(out, v)
+		}
+	}
+	return out
+}
+
+func pullAll[T comparable](ary []T, values []T) []T {
+	out := make([]T, 0)
+	for _, v := range ary {
+		if !includes(values, v) {
+			out = append(out, v)
+		}
+	}
+	return out
+}

@@ -524,3 +524,63 @@ func TestIndexOf(t *testing.T) {
 		}
 	}
 }
+
+func TestPull(t *testing.T) {
+	{
+		input := []string{"a", "b", "c", "a", "b", "c"}
+		expect := []string{"a", "c", "a", "c"}
+
+		output := pull(input, "b")
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input := []string{"a", "b", "c", "a", "b", "c"}
+		expect := []string{"a", "a"}
+
+		output := pull(input, "c", "b")
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input := []string{"a", "b", "c", "a", "b", "c"}
+		expect := []string{"a", "b", "c", "a", "b", "c"}
+
+		output := pull(input)
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+}
+
+func TestPullAll(t *testing.T) {
+	{
+		input := []string{"a", "b", "c", "a", "b", "c"}
+		expect := []string{"a", "c", "a", "c"}
+
+		output := pullAll(input, []string{"b"})
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input := []string{"a", "b", "c", "a", "b", "c"}
+		expect := []string{"a", "a"}
+
+		output := pullAll(input, []string{"c", "b"})
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input := []string{"a", "b", "c", "a", "b", "c"}
+		expect := []string{"a", "b", "c", "a", "b", "c"}
+
+		output := pullAll(input, []string{})
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+}
