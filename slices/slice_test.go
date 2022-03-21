@@ -1268,6 +1268,28 @@ func TestUnzip(t *testing.T) {
 	}
 }
 
+func TestUnzipWith(t *testing.T) {
+	sum := func(xs ...int) int { return xs[0] + xs[1] + xs[2] }
+	{
+		input := [][]int{{10, 1}, {20, 2}, {30, 3}}
+		expect := []int{60, 6}
+
+		output := unzipWith(sum, input)
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input := [][]int{}
+		expect := []int{}
+
+		output := unzipWith(sum, input)
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+}
+
 func TestWithout(t *testing.T) {
 	{
 		input := []int{10, 20, 30, 20, 40}
@@ -1439,6 +1461,61 @@ func TestZip(t *testing.T) {
 		expect := [][]int{}
 
 		output := zip(input1, input2)
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+}
+
+func TestZipWith(t *testing.T) {
+	sum := func(xs ...int) int { return xs[0] + xs[1] }
+
+	{
+		input1 := []int{10, 20, 30}
+		input2 := []int{1, 2, 3}
+		expect := []int{11, 22, 33}
+
+		output := zipWith(sum, input1, input2)
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input1 := []int{10, 20, 30, 40}
+		input2 := []int{1, 2, 3}
+		expect := []int{11, 22, 33}
+
+		output := zipWith(sum, input1, input2)
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input1 := []int{10, 20, 30}
+		input2 := []int{1, 2, 3, 4}
+		expect := []int{11, 22, 33}
+
+		output := zipWith(sum, input1, input2)
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input1 := []int{}
+		input2 := []int{1, 2, 3}
+		expect := []int{}
+
+		output := zipWith(sum, input1, input2)
+		if diff := cmp.Diff(expect, output); diff != "" {
+			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
+		}
+	}
+	{
+		input1 := []int{10, 20, 30}
+		input2 := []int{}
+		expect := []int{}
+
+		output := zipWith(sum, input1, input2)
 		if diff := cmp.Diff(expect, output); diff != "" {
 			t.Errorf("result is missmatch (-expect, +result):\n%s", diff)
 		}

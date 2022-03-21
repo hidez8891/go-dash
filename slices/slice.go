@@ -480,6 +480,10 @@ func unzip[T any](as [][]T) [][]T {
 	return zip(as...)
 }
 
+func unzipWith[T, U any](f func(...T) U, as [][]T) []U {
+	return zipWith(f, as...)
+}
+
 func without[T comparable](ary []T, values ...T) []T {
 	out := make([]T, 0)
 	for _, v := range ary {
@@ -524,4 +528,13 @@ func zip[T any](as ...[]T) [][]T {
 		}
 		out = append(out, tmp)
 	}
+}
+
+func zipWith[T, U any](f func(...T) U, as ...[]T) []U {
+	tmp := zip(as...)
+	out := make([]U, len(tmp))
+	for i, args := range tmp {
+		out[i] = f(args...)
+	}
+	return out
 }
